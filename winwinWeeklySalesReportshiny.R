@@ -203,7 +203,7 @@ processfile <- function(df){
   dfwc <- sprintf("%.1f %%", 100*(lastweeksum$discounts/(fourweeksum$discounts / 4) - 1))
   di <- lastweeksum$disitems
   dia <- sprintf("$%.2f", lastweeksum$disitemavg)
-  nn <- sprintf("$%.2f", lastweeksum$cofnet)
+  nn <- sprintf("$%.2f", lastweeksum$nonenet)
   nc <- sprintf("%.1f %%", 100*(lastweeksum$nonenet/prevweeksum$nonenet - 1))
   nfwc <- sprintf("%.1f %%", 100*(lastweeksum$nonenet/(fourweeksum$nonenet / 4) - 1))
   ni <- lastweeksum$noneitems
@@ -265,7 +265,7 @@ dayplot <- function(){
   par(cex.main = 1.5, cex.axis = 1.5, cex.lab = 1.5)
   dp <- barplot(brunchadded, names.arg = c("Tues", "Weds", "Thurs", "Fri", "Sat", "Sat Nite", 
                                            "Sun", "Sun Nite"),
-                col = cols, las = 1, main = "Net Sales Per Shift",
+                col = cols, las = 1, main = "Net Sales Per Shift", ylim = c(0,1400),
                 xlab = paste0(as.character.Date(startlw, format = "%m/%d/%y"), " - ", as.character.Date(endlw-1, format = "%m/%d/%y")))
   segments(0.1, 500, 3.7, 500,col = "red", lty=3, lwd=3)
   segments(3.75, 1250, 4.85, 1250,col = "red", lty=3, lwd=3)

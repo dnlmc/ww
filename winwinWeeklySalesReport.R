@@ -1,6 +1,6 @@
 #### Weekly summary
 
-#newdoc <- file.choose()
+file <- file.choose()
 wwsales <- read.csv(file)
 
 # wwsales <- read.csv("C:/Users/fL3xZ0n3/Documents/winwin/items-2016-05-03-2016-06-14.csv")
@@ -196,7 +196,7 @@ dc <- sprintf("%.1f %%", 100*(lastweeksum$discounts/prevweeksum$discounts - 1))
 dfwc <- sprintf("%.1f %%", 100*(lastweeksum$discounts/(fourweeksum$discounts / 4) - 1))
 di <- lastweeksum$disitems
 dia <- sprintf("$%.2f", lastweeksum$disitemavg)
-nn <- sprintf("$%.2f", lastweeksum$cofnet)
+nn <- sprintf("$%.2f", lastweeksum$nonenet)
 nc <- sprintf("%.1f %%", 100*(lastweeksum$nonenet/prevweeksum$nonenet - 1))
 nfwc <- sprintf("%.1f %%", 100*(lastweeksum$nonenet/(fourweeksum$nonenet / 4) - 1))
 ni <- lastweeksum$noneitems
@@ -255,7 +255,7 @@ cols <- c("green", "green", "green", "green", "magenta", "green", "magenta","gre
 
 barplot(brunchadded, names.arg = c("Tues", "Weds", "Thurs", "Fri", "Sat", "Sat Nite", 
                                   "Sun", "Sun Nite"),
-        col = cols, las = 1, main = "Net Sales Per Shift",
+        col = cols, las = 1, main = "Net Sales Per Shift", ylim = c(0, 1400),
         xlab = paste0(as.character.Date(startlw, format = "%m/%d/%y"), " - ", as.character.Date(endlw-1, format = "%m/%d/%y")))
 segments(0.1, 500, 3.7, 500,col = "red", lty=3, lwd=3)
 segments(3.75, 1250, 4.85, 1250,col = "red", lty=3, lwd=3)
