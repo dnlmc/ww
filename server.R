@@ -55,7 +55,7 @@ shinyServer(function(input, output) {
       output$itemplots  <- renderPlot({
         itemplots()
         
-      }, height = 1100, width = 680)
+      }, height = 1100, width = 680, res = 100)
     })
     
   }

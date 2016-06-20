@@ -393,7 +393,7 @@ itemplots <- function(){
                 col = "orange")
   #labs <- paste(names.arg = abbreviate(names(bartop20), minlength = 12))
   bblabs <- paste(names.arg = substr(names(bbtop), 1, 15))
-  text(cex=1.6, x=xx+.2, y=-3, bblabs, xpd=TRUE, srt=55, pos=2)
+  text(cex=1.8, x=xx+.2, y=-3, bblabs, xpd=TRUE, srt=55, pos=2)
   
   
   xy <- barplot(bltop10, xaxt="n", 
@@ -401,7 +401,7 @@ itemplots <- function(){
                 col = "purple")
   #labs <- paste(names.arg = abbreviate(names(bartop20), minlength = 12))
   bllabs <- paste(names.arg = substr(names(bltop10), 1, 15))
-  text(cex=1.6, x=xy+.33, y=-1, bllabs, xpd=TRUE, srt=55, pos=2)
+  text(cex=1.8, x=xy+.33, y=-1, bllabs, xpd=TRUE, srt=55, pos=2)
   
   
   
@@ -409,6 +409,6 @@ itemplots <- function(){
                main = "Top 10 Kitchen Items for Week",
                col = "pink")
   labs <- paste(substr(names(kittop10), 1, 15))
-  text(cex=1.6, x=x+.20, y=-.60, labs, xpd=TRUE, srt=50, pos=2)
+  text(cex=1.8, x=x+.20, y=-.60, labs, xpd=TRUE, srt=50, pos=2)
   
 }
