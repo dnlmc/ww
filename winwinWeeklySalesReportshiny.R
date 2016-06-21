@@ -328,34 +328,37 @@ goalplot <- function(){
   ####### goalplot
   
   
-  fourweek$daygoal <- 500
+  lastfour <- rbind.data.frame(ppprevweek, pprevweek, prevweek, lastweek)
+  
+  
+  lastfour$daygoal <- 500
   days500 <- c("Monday", "Tuesday", "Wednesday", "Thursday")
   
   
   
-  for (i in 1:nrow(fourweek)){
-    if (fourweek$day[i] %in% days500){
-      fourweek$daygoal[i] <- 500
-    } else if (fourweek$day[i] == "Friday") {
-      fourweek$daygoal[i] <- 1250
-    } else if (fourweek$day[i] == "Saturday") {
-      fourweek$daygoal[i] <- 1750
+  for (i in 1:nrow(lastfour)){
+    if (lastfour$day[i] %in% days500){
+      lastfour$daygoal[i] <- 500
+    } else if (lastfour$day[i] == "Friday") {
+      lastfour$daygoal[i] <- 1250
+    } else if (lastfour$day[i] == "Saturday") {
+      lastfour$daygoal[i] <- 1750
     } else if (fourweek$day[i] == "Sunday") {
-      fourweek$daygoal[i] <- 1000
+      lastfour$daygoal[i] <- 1000
     }
   }
   
-  fourweek$daygoalmet <- (fourweek$net / fourweek$daygoal) - 1
+  lastfour$daygoalmet <- (lastfour$net / lastfour$daygoal) - 1
   
   par(cex.main = 1.5, cex.axis = 1.5, cex.lab = 1.5)
-  par(mar=c(5,4.1,4.1,2.1))
-  gm <- barplot(fourweek$daygoalmet, 
+  par(mar=c(5,4.1,4.8,1))
+  gm <- barplot(lastfour$daygoalmet, 
                 ylim = c(-1,1), ylab='', xaxt = "n" , las = 2,
-                col=ifelse(fourweek$daygoalmet>0,"light green","magenta"),
+                col=ifelse(lastfour$daygoalmet>0,"light green","magenta"),
                 main = "Daily % of Sales Goals Missed or Exceeded\nin Past Month",
-                xlab = paste0(as.character.Date(startfw, format = "%m/%d/%y"), " - ", as.character.Date(endlw-1, format = "%m/%d/%y")))
-  text(cex = 1,x=gm-.19, y =-1.2, paste(substr(fourweek$day,1, 3)), srt = 90, xpd =T)
-  
+                xlab = paste0(as.character.Date(startpppw, format = "%m/%d/%y"), " - ", as.character.Date(endlw-1, format = "%m/%d/%y")))
+  text(cex = 1.25,x=gm-.1, y =-1.2, paste(substr(lastfour$day,1, 3)), srt = 90, xpd =T)  
+
 }
 
 
