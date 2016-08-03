@@ -343,7 +343,7 @@ goalplot <- function(){
       lastfour$daygoal[i] <- 1250
     } else if (lastfour$day[i] == "Saturday") {
       lastfour$daygoal[i] <- 1750
-    } else if (fourweek$day[i] == "Sunday") {
+    } else if (lasfour$day[i] == "Sunday") {
       lastfour$daygoal[i] <- 1000
     }
   }
