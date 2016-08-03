@@ -325,7 +325,7 @@ for (i in 1:nrow(lastfour)){
     lastfour$daygoal[i] <- 1250
   } else if (lastfour$day[i] == "Saturday") {
     lastfour$daygoal[i] <- 1750
-  } else if (fourweek$day[i] == "Sunday") {
+  } else if (lastfour$day[i] == "Sunday") {
     lastfour$daygoal[i] <- 1000
   }
 }
