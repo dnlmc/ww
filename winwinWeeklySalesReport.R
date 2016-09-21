@@ -16,7 +16,7 @@ wwsales$disnum <- as.numeric(sub('-', '',as.character(wwsales$disnum),fixed=TRUE
 # convert Date to usable date, compute usable aadjusted Time & Date Columns
 wwsales$rDate <- as.Date(wwsales$Date, format = "%m/%d/%y")
 wwsales$adjtime <- as.numeric(substr(wwsales$Time, 1, 2))
-wwsales$adjdate <- wwsales$rDate
+wwsales$adjdate <- wwsales$rDate #arbitrary change
 
 for (i in 1:nrow(wwsales)){
   if (wwsales$adjtime[i] <= 5){
