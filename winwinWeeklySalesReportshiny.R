@@ -106,12 +106,14 @@ processfile <- function(df){
   #daygross$kitgross <- tapply(kitsales$grossnum, kitsales$adjdate, sum)
   #daygross$cofgross <- tapply(cofsales$grossnum, cofsales$adjdate, sum)
   
-  # !!!!! issue with subsetting: currently based on indexes & reliees on there being no Mondays in the 
-  # data.  Can try to implement by actual date ranges, maybe even using day of week + last observation
+  # assign dates to markers
   
-  finalsun <<- tail(daynet$date, 1)
-  startlw <<- finalsun - 5
-  endlw <<- finalsun + 1
+  sundys <- daynet[daynet$day == "Sunday", ]
+  
+  
+  finalsun <<- tail(sundys$date, 1)
+  startlw <<- finalsun - 6
+  endlw <<- finalsun 
   startpw <<- startlw - 7
   endpw <<- startlw - 1
   startppw <<- startpw - 7
@@ -242,42 +244,11 @@ processfile <- function(df){
 
 dayplot <- function(){
 ################ weekday weekend breakdown
-
-  lastweekend <<- lastweek[lastweek$day == "Friday" | lastweek$day == "Saturday" , ]
-  lastweekdays <<- lastweek[lastweek$day != "Friday" & lastweek$day != "Saturday" , ]
-  
-  brunchitems <<- wwsales[wwsales$adjdate >= (endlw-2),]
-  brunchitems <<- brunchitems[brunchitems$adjtime > 6 & brunchitems$adjtime < 17,]
-  
-  brunchnet <<- tapply(brunchitems$netnum, brunchitems$adjdate, sum)
-  
-  
-  
-  
-  ## dayplot
-  
-  brunchadded <<- c(lastweek$net[1], lastweek$net[2], lastweek$net[3], 
-                   lastweek$net[4], brunchnet[1], lastweek$net[5]-brunchnet[1], 
-                   brunchnet[2], lastweek$net[6]-brunchnet[2])
-  
-  cols <- c("green", "green", "green", "green", "magenta", "green", "magenta","green")
-  
   par(cex.main = 1.5, cex.axis = 1.5, cex.lab = 1.5)
-  dp <- barplot(brunchadded, names.arg = c("Tues", "Weds", "Thurs", "Fri", "Sat", "Sat Nite", 
-                                           "Sun", "Sun Nite"),
-                col = cols, las = 1, main = "Net Sales Per Shift", ylim = c(0,1400),
-                xlab = paste0(as.character.Date(startlw, format = "%m/%d/%y"), " - ", as.character.Date(endlw-1, format = "%m/%d/%y")))
-  segments(0.1, 500, 3.7, 500,col = "red", lty=3, lwd=3)
-  segments(3.75, 1250, 4.85, 1250,col = "red", lty=3, lwd=3)
-  segments(4.95, 500, 6.1, 500,col = "red", lty=3, lwd=3)
-  segments(6.15, 1250, 7.25, 1250,col = "red", lty=3, lwd=3)
-  segments(7.35, 500, 9.75, 500,col = "red", lty=3, lwd=3)
-  legend("topleft", legend= c("Night (> 5pm)", "Brunch"),
-         bty = "n", fill = c("green", "magenta"),
-         pt.cex = 2, inset=c(.012, 0),  x.intersp = 1.80)
-  legend("topleft", legend= "Goal", lty = 3, lwd = 3,
-         bty = "n", y.intersp=5.3, col="red", 
-         x.intersp = .5, pt.cex = 2, inset=c(.012, 0))
+  barplot(lastweek$net, names.arg = substr(lastweek$day,1, 3), border = 'green',
+          col = 'green2', las = 1, main = "Net Sales Per Shift",
+          xlab = paste0(as.character.Date(lastweek$date[1], format = "%m/%d/%y"), " - ", as.character.Date(tail(lastweek$date,1), format = "%m/%d/%y")))
+  
 
 }
 
@@ -297,23 +268,25 @@ weeklyplot <- function(){
 
   # as.Date(weeklyframe[1, 16], origin = "1970-01-01")
   
-  par(cex.main = 1.5, cex.axis = 1.5, cex.lab = 1.5)
+  par(cex.main = 1.5, cex.axis = 1.5, cex.lab = 1.5, mar = c(5,4.5,4.1,9))
   wp <- plot(as.Date(weeklyframe$weekending, origin = "1970-01-01"), weeklyframe$net, type = "l", col = "green",
              lwd = 3, ylim = c(0, 6500), ylab='', xlab = 'Week Ending Date', las = 1, 
-             main = "Weekly Net Sales")
-  grid(nx = NA, ny = NULL, col = "lightgray", lty = "dotted",
+             main = "Weekly Net Sales", xaxt = "n")
+  grid(nx = NA, ny = NULL, col = "gray", lty = "dotted",
        lwd = .5, equilogs = TRUE)
   lines(weeklyframe$weekending, weeklyframe$barBnet, type = "l", col = "orange", lwd = 3)
   lines(weeklyframe$weekending, weeklyframe$barLnet, type = "l", col = "purple", lwd = 3)
   lines(weeklyframe$weekending, weeklyframe$cofnet, type = "l", col = "brown", lwd = 3)
-  lines(weeklyframe$weekending, weeklyframe$kitnet, type = "l", col = "magenta", lwd = 3)
+  lines(weeklyframe$weekending, weeklyframe$kitnet, type = "l", col = "pink2", lwd = 3)
   lines(weeklyframe$weekending, weeklyframe$nonenet, type = "l", col = "light blue", lwd = 3)
   lines(weeklyframe$weekending, c(5500, 5500, 5500, 5500), type = "l", col = "red", lty = 3, lwd = 3)
-  legend("topright", legend= c("goal", "total", "beer/wine", "liquor",
+  axis(1, at = weeklyframe$weekending,
+       labels = format(weeklyframe$weekending, "%b %d"))
+  legend("right", legend= c("goal", "total", "beer/wine", "liquor",
                                "none", "kitchen", "coffee"),
-         bty = "1", box.col = "white", cex = 1.1,
-         col=c("red", "green", "orange", "purple", "light blue", "magenta", "brown"), lty = c(3,1,1,1,1,1,1),
-         lwd = 2, x.intersp = 1, y.intersp = .90, inset=c(.015, .01))
+         bty = "1", box.col = "white", cex = 1.3, xpd = T, inset = c(-.24,0),
+         col=c("red", "green", "orange", "purple", "light blue", "pink2", "brown"), lty = c(3,1,1,1,1,1,1),
+         lwd = 2)
   lines(weeklyframe$weekending, weeklyframe$net, type = "l", col = "green",
         lwd = 3)
   #lines(weeklyframe$weekending, weeklyframe$discounts, type = "l", col = "pink",
@@ -343,7 +316,7 @@ goalplot <- function(){
       lastfour$daygoal[i] <- 1250
     } else if (lastfour$day[i] == "Saturday") {
       lastfour$daygoal[i] <- 1750
-    } else if (lasfour$day[i] == "Sunday") {
+    } else if (lastfour$day[i] == "Sunday") {
       lastfour$daygoal[i] <- 1000
     }
   }
@@ -356,7 +329,7 @@ goalplot <- function(){
                 ylim = c(-1,1), ylab='', xaxt = "n" , las = 2,
                 col=ifelse(lastfour$daygoalmet>0,"light green","magenta"),
                 main = "Daily % of Sales Goals Missed or Exceeded\nin Past Month",
-                xlab = paste0(as.character.Date(startpppw, format = "%m/%d/%y"), " - ", as.character.Date(endlw-1, format = "%m/%d/%y")))
+                xlab = paste0(as.character.Date(lastfour$dat[1], format = "%m/%d/%y"), " - ", as.character.Date(tail(lastfour$date,1), format = "%m/%d/%y")))
   text(cex = 1.25,x=gm-.1, y =-1.2, paste(substr(lastfour$day,1, 3)), srt = 90, xpd =T)  
 
 }
